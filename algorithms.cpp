@@ -236,3 +236,271 @@ void removeDuplicates(listNode* node){
 		node = node->next;
 	}
 }
+
+//finds the kth to last element of a singly linked list
+//O(n) time
+template<class N>
+listNode* kthToLastOfList(listNode* head, int k){
+	if(k <= 0) 
+		return nullptr;
+
+	listNode* r1 = head;
+	listNode* r2 = head;
+
+	for(int i = 0; i < k-1; i++){
+		if(r2 == nullptr)
+			return nullptr;
+		r2 = r2->next;
+	}
+	if(r2 == nullptr)
+		return nullptr;
+
+	while(r2->next != nullptr){
+		r1 = r1->next;
+		r2 = r2->next;
+	}
+	return r1;
+}
+
+//deletes a node in the middle of a singly linked list, given only access to that node
+template<class N>
+bool deleteListNode(listNode* node){
+	if(node == nullptr || node->next == nullptr)
+		return false;
+
+	//copies next node's data to current node and delete next node
+	listNode* next = node->next;
+	node->data = next->data;
+	node->next = next->next;
+	return true;
+}
+
+//finds beginning of loop in a circular linked list
+template<class N>
+listNode* findBegin(listNode* head){
+	listNode* slow = head;
+	listNode* fast = head;
+
+	//slow travels 1 node while fast travels 2 nodes at a time
+	//when they collide, break and set slow to head
+	while(fast != nullptr && fast->next != nullptr){
+		slow = slow->next;
+		fast = fast->next->next;
+		if(slow == fast)
+			break;
+	}
+
+	if(fast == nullptr && fast->next == nullptr)
+		return nullptr;
+	
+	slow = head;
+	
+	//both slow and fast travel 1 node at a time and when they collide, they're at the beginning of the loop in the list
+	while(slow != fast){
+		slow = slow->next;
+		fast = fast->next;
+	}
+	return fast;
+}
+
+//determines whether a binary tree is balanced
+//O(n) time
+template<class V>
+bool isBalanced(treeNode* root, int& height){
+	int leftHeight = 0;
+	int rightHeight = 0;
+
+	bool leftBal = false;
+	bool rightBal = false;
+
+	if(root == nullptr){
+		height = 0;
+		return true;
+	}
+
+	//recur for subtrees
+	leftHeight = isBalanced(root->left, height);
+	rightHeight = isBalanced(root->right, height);
+
+	height = max(leftHeight, rightHeight) + 1;
+
+	//not balanced
+	if((leftHeight - rightHeight > 1) || (rightHeight - leftHeight > 1))
+		return false;
+	//balanced if subtrees and current tree are balanced
+	else
+		return (leftBal && rightBal);
+}
+
+//determines whether n1 and n2 are connected within the graph
+template<class G>
+bool isConnected(graphNode* n1, graphNode* n2){
+	if(n1 == n2)
+		return true;
+
+	queue<graphNode*> nodes;
+	nodes.push(n1);
+	graphNode* temp;
+
+	while(!nodes.empty()){
+		temp = nodes.pop();
+		if(temp != nullptr){
+			for(graphNode* i : nodes){
+				if(!(i->visited)){
+					if(i == n2)
+						return true;
+					else{
+						i->visited = true;
+						nodes.push(i);
+					}
+				}
+			}
+			temp->visited = true;
+		}
+	}
+	return false;
+}
+
+//creates a linked list for all the nodes at the level specified
+template<class V>
+void createLevelLinkedList(treeNode* root, listNode* head, int level){
+	if(root == nullptr || level < 0)
+			return;
+	
+	if(level == 0){
+		listNode* temp = new listNode();
+		temp->next = head->next;
+		temp->data = root->data;
+		head->next = temp;
+	}
+
+	createLevelLinkedList(root->right, head, level-1);
+	createLevelLinkedList(root->left, head, level-1);
+}
+
+//determines whether a binary tree is a binary search tree using min/max algorithm
+//O(n) time
+template<class V>
+bool isBST(treeNode* root, int min, int max){
+	if(root == nullptr)
+		return true;
+
+	if(root->data <= min || root->data > max)
+		return false;
+
+	return (isBST(root->left, min, root->data) && isBST(root->right, root->data, max));
+}
+
+//returns the leftmost child in the tree starting at root
+//O(h) time, h = height of tree
+template<class V>
+treeNode* leftMostChild(treeNode* root){
+	if(root == nullptr)
+		return nullptr;
+	treeNode* curr = root;
+	while(curr->left != nullptr)
+		curr = curr->left;
+	return curr;
+}
+
+//finds the in-order successor to the given node in a BST (assuming node has parent pointer)
+template<class V>
+treeNode* inorderSucc(treeNode* root){
+	if(root->right != nullptr)
+		return leftMostChild(root->right);
+	else{
+		treeNode* s = root;
+		treeNode* t = s->parent;
+		while(t != nullptr && s != t->left){
+			s = t;
+			t = t->parent;
+		}
+		return t;
+	}
+}
+
+//finds the in-order successor to the given node in a BST (assuming node has no parent pointer)
+template<class V>
+treeNode* inorderSucc(treeNode* root, treeNode* node){
+	if(node->right != nullptr)
+		return leftMostChild(node->right);
+	
+	treeNode* succ = nullptr;
+	while(root != nullptr){
+		if(node->data < root->data){
+			succ = root;
+			root = root->left;
+		}
+		else if(node->data > root->data)
+			root = root->right;
+		else
+			break;
+	}
+	return succ;
+}
+
+//finds the lowest common ancestor of n1 and n2 in a binary tree
+//O(n) time
+template<class V>
+treeNode* BT_LCA(treeNode* root, treeNode* n1, treeNode* n2){
+	if(root == nullptr)
+		return nullptr;
+
+	if(root->data == n1->data || root->data == n2->data)
+		return root;
+
+	treeNode* left = BT_LCA(root->left, n1, n2);
+	treeNode* right = BT_LCA(root->right, n1, n2);
+
+	if(left && right)
+		return root;
+
+	if(left != nullptr)
+		return left;
+	else
+		return right;
+}
+
+//finds the lowest common ancestor of n1 and n2 in a binary search tree
+//O(h) time
+template<class V>
+treeNode* BST_LCA(treeNode* root, treeNode* n1, treeNode* n2){
+	while(root != nullptr){
+		if(n1->data < root->data && n2->data < root->data)
+			root = root->left;
+		else if(n1->data > root->data && n2->data > root->data)
+			root = root->right;
+		else
+			break;
+	}
+	return root;
+}
+
+//determines whether two trees match each other
+template<class V>
+bool treeMatch(treeNode* t1, treeNode* t2){
+	if(t1 == nullptr && t2 == nullptr)
+		return true;
+
+	if(t1 == nullptr || t2 == nullptr)
+		return false;
+
+	if(t1->data != t2->data)
+		return false;
+	else
+		return (treeMatch(t1->left, t2->left) && treeMatch(t1->right, t2->right));
+}
+
+//determines whether t1 contains t2 as a subtree
+template<class V>
+bool containsTree(treeNode* t1, treeNode* t2){
+	if(t2 == nullptr)
+		return true;
+	if(t1 == nullptr)
+		return false;
+	if(t1->data == t2->data){
+		if(treeMatch(t1, t2))
+			return true;
+	}
+	return (containsTree(t1->left, t2) || containsTree(t1->right, t2));
+}
