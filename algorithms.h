@@ -67,4 +67,66 @@ string runLengthEncode(string s);
 //O(n) time
 void removeDuplicates(listNode* head);
 
+//finds the kth to last element of a singly linked list
+//O(n) time
+template<class N>
+listNode* kthToLastOfList(listNode* head, int k);
+
+//deletes a node in the middle of a singly linked list, given only access to that node
+template<class N>
+bool deleteListNode(listNode* node);
+
+//finds beginning of loop in a circular linked list
+template<class N>
+listNode* findBegin(listNode* head);
+
+//determines whether a binary tree is balanced
+//O(n) time
+template<class V>
+bool isBalanced(treeNode* root, int& height);
+
+//determines whether n1 and n2 are connected within the graph
+template<class G>
+bool isConnected(graphNode* n1, graphNode* n2);
+
+//creates a linked list for all the nodes at the level specified
+template<class V>
+void createLevelLinkedList(treeNode* root, listNode* head, int level);
+
+//determines whether a binary tree is a binary search tree using min/max algorithm
+//O(n) time
+template<class V>
+bool isBST(treeNode* root, int min, int max);
+
+//returns the leftmost child in the tree starting at root
+//O(h) time, h = height of tree
+template<class V>
+treeNode* leftMostChild(treeNode* root);
+
+//finds the in-order successor to the given node in a BST (assuming node has parent pointer)
+template<class V>
+treeNode* inorderSucc(treeNode* root);
+
+//finds the in-order successor to the given node in a BST (assuming node has no parent pointer)
+template<class V>
+treeNode* inorderSucc(treeNode* root, treeNode* node);
+
+//finds the lowest common ancestor of n1 and n2 in a binary tree
+//O(n) time
+template<class V>
+treeNode* BT_LCA(treeNode* root, treeNode* n1, treeNode* n2);
+
+//finds the lowest common ancestor of n1 and n2 in a binary search tree
+//O(h) time
+template<class V>
+treeNode* BST_LCA(treeNode* root, treeNode* n1, treeNode* n2);
+
+//determines whether two trees match each other
+template<class V>
+bool treeMatch(treeNode* t1, treeNode* t2);
+
+//determines whether t1 contains t2 as a subtree
+template<class V>
+bool containsTree(treeNode* t1, treeNode* t2);
+
 #endif
