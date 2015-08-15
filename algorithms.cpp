@@ -504,3 +504,157 @@ bool containsTree(treeNode* t1, treeNode* t2){
 	}
 	return (containsTree(t1->left, t2) || containsTree(t1->right, t2));
 }
+
+//updates bits i to j of n with m (length of m is guaranteed to be correct)
+int updateBits(int n, int m, int i, int j){
+	int allOnes = ~0;
+
+	//forming left side of mask
+	int left = allOnes << (j+1);
+
+	//forming right side of mask
+	int right = (1 << i) - 1;
+
+	//form mask
+	int mask = left | right;
+
+	//clear bits i to j in n
+	int maskedN = n & mask;
+
+	//shift m into appropriate insert position
+	int shiftedM = m << i;
+
+	return maskedN | shiftedM;
+}
+
+//determines whether n is a power of 2
+bool isPowerOf2(int n){
+	if(n & (n-1) == 0)
+		return true;
+	return false;
+}
+
+//determines number of bits to flip to convert a to b
+int bitFlipNeeded(int a, int b){
+	int count = 0;
+	for(int x = a^b; x != 0; x = x & (x-1))
+		count++;
+	return count;
+}
+
+//a magic index i is one such that arr[i] == i
+//finds a magic index in arr using binary search (assuming non-distinct elements)
+//if elements are distinct, we can limit our search on half of array depending on mid index
+int magicIndex(int arr[], int size, int start, int end){
+	if(end < start || start < 0 || end > size)
+		return -1;
+	int midIndex = (start + end) / 2;
+	int midValue = arr[midIndex];
+	if(midValue == midIndex)
+		return midIndex;
+
+	//searches left subarray
+	int leftIndex = min(midIndex-1, midValue);
+	int left = magicIndex(arr, size, start, leftIndex);
+	if(left >= 0)
+		return left;
+
+	//searches right subarray
+	int rightIndex = max(midIndex+1, midValue);
+	int right = magicIndex(arr, size, rightIndex, end);
+	return right;
+}
+
+//inserts c at pos in s
+string insertCharAt(string s, char c, int pos){
+	string start = s.substr(0, pos);
+	string end = s.substr(pos);
+	return start + c + end;
+}
+
+//computes all permutations of a string of unique characters
+//O(n!) time
+vector<string> computePerms(string s){
+	vector<string> perms;
+	//base case
+	if(s.size() == 0){
+		perms.push_back("");
+		return perms;
+	}
+
+	//insert first char into each possible position
+	char first = s.at(0);
+	string remainder = s.substr(1);
+	vector<string> words = computePerms(remainder);
+	for(string word : words){
+		for(int i = 0; i < words.size(); i++){
+			string perm = insertCharAt(s, first, i);
+			perms.push_back(perm);
+		}
+	}
+	return perms;
+}
+
+//merges two sorted arrays(a is big enough to hold values of both a and b)
+void merge(int a[], int b[], int sizeA, int sizeB){
+	int indexA = sizeA - 1;
+	int indexB = sizeB - 1;
+	int indexMerged = sizeA + sizeB - 1;
+
+	//merge a and b starting at the end to avoid shifting
+	while(indexB >= 0){
+		if(indexA >= 0 && a[indexA] > b[indexB]){
+			a[indexMerged] = a[indexA];
+			indexA--;
+		}
+		else if(a[indexA] < b[indexB]){
+			a[indexMerged] = b[indexB];
+			indexB--;
+		}
+		indexMerged--;
+	}
+}
+
+//search a rotated sorted array to find the number x using a variation of binary search
+//O(log n) time expected
+int search(int arr[], int start, int end, int x){
+	int mid = (start + end)/2;
+	if(arr[mid] == x)
+		return mid;
+	if(end < start)
+		return -1;
+
+	//left is normally ordered
+	if(arr[start] < arr[mid]){
+		//search left
+		if(arr[start] <= x && x <= arr[mid])
+			return search(arr, start, mid-1, x);
+		//search right
+		else
+			return search(arr, mid+1, end, x);
+	}
+	//right is normally ordered
+	else if(arr[mid] < arr[end]){
+		//search right
+		if(arr[mid] <= x && x <= arr[end])
+			return search(arr, mid+1, end, x);
+		//search left
+		else
+			return search(arr, start, mid-1, x);
+	}
+	//left half all repeats
+	else if(arr[start] == arr[mid]){
+		//right half is different
+		if(arr[mid] != arr[end])
+			return search(arr, mid+1, end, x);
+		//search both sides
+		else{
+			int res = search(a, start, mid-1, x);
+			if(res == -1)
+				return search(a, mid+1, end, x);
+			else
+				return res;
+		}
+	}
+	return -1;
+}
