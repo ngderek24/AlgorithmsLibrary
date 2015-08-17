@@ -65,6 +65,12 @@ string runLengthEncode(string s);
 //inserts c at pos in s
 string insertCharAt(string s, char c, int pos);
 
+//given two strings, find the shortest distance between them in the string array
+int shortestDist(string s[], int size, string s1, string s2);
+
+//determines whether s can be rearranged to form a palindrome
+bool canFormPalindrome(string s);
+
 /*
 * Arrays
 */
@@ -83,6 +89,18 @@ void merge(int a[], int b[], int sizeA, int sizeB);
 //search a rotated sorted array to find the number x using a variation of binary search
 //O(log n) time expected
 int search(int arr[], int start, int end, int x);
+
+//finds contiguous sequence with largest sum in array (returns largest sum)
+int largestContSum(int arr[], int size);
+
+//prints all pairs of integers in the array that sums to the specified value
+//this version of implementation uses array accesses but you can also use a hash map if space is not a problem (O(n))
+//O(nlogn)
+void printSumPairs(int arr[], int size, int sum);
+
+//calculates the median of two sorted arrays
+//assumptions: both a1 and a2 are sorted and have the same size
+int median(int a1[], int a2[], int size);
 
 /*
 * Linked Lists
@@ -193,6 +211,17 @@ bool isPowerOf2(int n);
 //determines number of bits to flip to convert a to b
 int bitFlipNeeded(int a, int b);
 
+//increment value of x by 1 without using operators (only bit manipulation)
+int increment(int x);
+
+//rotate bits to the left by d bits
+//assumming 32-bit int
+int rotateLeft(int x, unsigned int d);
+
+//rotate bits to the right by d bits
+//assumming 32-bit int
+int rotateRight(int x, unsigned int d);
+
 /*
 * Recursion & Dynamic Programming
 */
@@ -205,5 +234,37 @@ int magicIndex(int arr[], int start, int end);
 //computes all permutations of a string of unique characters
 //O(n!) time
 vector<string> computePerms(string s);
+
+/*
+ * Searching and Sorting
+ */
+
+//selection sort on array
+void selectionSort(int arr[], int size);
+
+//bubble sort
+void bubbleSort(int arr[], int size);
+
+//insertion sort
+void insertionSort(int arr[], int size);
+
+//TODO: Merge Sort
+
+//partitions array around a pivot p, used for quicksort
+int partition(int arr[], int start, int end);
+
+//quicksort
+void quickSort(int arr[], int start, int end);
+
+/*
+ * Others
+ */
+
+//swaps two integers
+void swap(int& a, int& b);
+
+//calculate x^n
+//O(logn) time
+int power(int x, unsigned int n);
 
 #endif
