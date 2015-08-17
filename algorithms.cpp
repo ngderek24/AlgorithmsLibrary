@@ -5,11 +5,14 @@
 #include <cstdlib>
 #include <string>
 #include <set>
+#include <algorithm>
+#include <climits>
 using namespace std;
 
 //Level order traversal using queue
 //O(n) time complexity, n = number of nodes in tree
 //visits node at each level and add children to queue similar to BFS
+template<class V>
 void levelOrder(treeNode* root){
 	treeNode* temp = root;
 	queue<treeNode*> q;
@@ -30,6 +33,7 @@ void levelOrder(treeNode* root){
 //Level order traversal using queue in spiral using two stacks
 //O(n) time complexity, O(n) space, n = number of nodes in tree
 //visits node at each level and add children to two stacks to traverse in a spiral
+template<class V>
 void levelOrderSpiral(treeNode* root){
 	if (root == NULL)
 		return;
@@ -79,6 +83,7 @@ void printDuplicate(int arr[], int size){
 
 //Reverse a linked list
 //O(n) time, O(1) space
+template<class N>
 void reverseLinkedList(listNode* head){
 	listNode* prev = nullptr;
 	listNode* curr = head;
@@ -222,6 +227,7 @@ string runLengthEncode(string s){
 
 //removes duplicates from an unsorted linked list
 //O(n) time
+template<class N>
 void removeDuplicates(listNode* node){
 	set<int> listData;
 	listNode* prev = nullptr;
@@ -332,7 +338,7 @@ bool isBalanced(treeNode* root, int& height){
 		return (leftBal && rightBal);
 }
 
-//determines whether n1 and n2 are connected within the graph
+//determines whether n1 and n2 are connected within the graph (BFS)
 template<class G>
 bool isConnected(graphNode* n1, graphNode* n2){
 	if(n1 == n2)
@@ -367,6 +373,7 @@ void createLevelLinkedList(treeNode* root, listNode* head, int level){
 	if(root == nullptr || level < 0)
 			return;
 	
+	//at right level so add node to linked list
 	if(level == 0){
 		listNode* temp = new listNode();
 		temp->next = head->next;
@@ -374,6 +381,7 @@ void createLevelLinkedList(treeNode* root, listNode* head, int level){
 		head->next = temp;
 	}
 
+	//recur tree, starting with right first because we're inserting to beginning of linked list
 	createLevelLinkedList(root->right, head, level-1);
 	createLevelLinkedList(root->left, head, level-1);
 }
@@ -385,6 +393,7 @@ bool isBST(treeNode* root, int min, int max){
 	if(root == nullptr)
 		return true;
 
+	//check if data is within valid range
 	if(root->data <= min || root->data > max)
 		return false;
 
@@ -406,8 +415,10 @@ treeNode* leftMostChild(treeNode* root){
 //finds the in-order successor to the given node in a BST (assuming node has parent pointer)
 template<class V>
 treeNode* inorderSucc(treeNode* root){
+	//if has right child, find leftmost child of right child
 	if(root->right != nullptr)
 		return leftMostChild(root->right);
+	//go up the tree until a node whose left child is this node
 	else{
 		treeNode* s = root;
 		treeNode* t = s->parent;
@@ -422,9 +433,11 @@ treeNode* inorderSucc(treeNode* root){
 //finds the in-order successor to the given node in a BST (assuming node has no parent pointer)
 template<class V>
 treeNode* inorderSucc(treeNode* root, treeNode* node){
+	//if has right child, find leftmost child of right child
 	if(node->right != nullptr)
 		return leftMostChild(node->right);
 	
+	//traverse down from root to find succ
 	treeNode* succ = nullptr;
 	while(root != nullptr){
 		if(node->data < root->data){
@@ -446,15 +459,19 @@ treeNode* BT_LCA(treeNode* root, treeNode* n1, treeNode* n2){
 	if(root == nullptr)
 		return nullptr;
 
+	//found node in tree
 	if(root->data == n1->data || root->data == n2->data)
 		return root;
 
+	//recur left and right
 	treeNode* left = BT_LCA(root->left, n1, n2);
 	treeNode* right = BT_LCA(root->right, n1, n2);
 
+	//if found in both left and right subtrees, this node must be the LCA
 	if(left && right)
 		return root;
 
+	//if only found in 1 subtree, returned node must be LCA
 	if(left != nullptr)
 		return left;
 	else
@@ -465,6 +482,7 @@ treeNode* BT_LCA(treeNode* root, treeNode* n1, treeNode* n2){
 //O(h) time
 template<class V>
 treeNode* BST_LCA(treeNode* root, treeNode* n1, treeNode* n2){
+	//use property of BST to find LCA
 	while(root != nullptr){
 		if(n1->data < root->data && n2->data < root->data)
 			root = root->left;
@@ -479,14 +497,18 @@ treeNode* BST_LCA(treeNode* root, treeNode* n1, treeNode* n2){
 //determines whether two trees match each other
 template<class V>
 bool treeMatch(treeNode* t1, treeNode* t2){
+	//empty trees match
 	if(t1 == nullptr && t2 == nullptr)
 		return true;
 
+	//only 1 empty tree so no match
 	if(t1 == nullptr || t2 == nullptr)
 		return false;
 
+	//different data so no match
 	if(t1->data != t2->data)
 		return false;
+	//recur for left and right
 	else
 		return (treeMatch(t1->left, t2->left) && treeMatch(t1->right, t2->right));
 }
@@ -498,10 +520,12 @@ bool containsTree(treeNode* t1, treeNode* t2){
 		return true;
 	if(t1 == nullptr)
 		return false;
+	//matching data so check if subtrees match
 	if(t1->data == t2->data){
 		if(treeMatch(t1, t2))
 			return true;
 	}
+	//recur for left and right
 	return (containsTree(t1->left, t2) || containsTree(t1->right, t2));
 }
 
@@ -657,4 +681,238 @@ int search(int arr[], int start, int end, int x){
 		}
 	}
 	return -1;
+}
+
+//swaps two integers
+void swap(int& a, int& b){
+	a = a^b;
+	b = a^b;
+	a = a^b;
+}
+
+//finds contiguous sequence with largest sum in array (returns largest sum)
+int largestContSum(int arr[], int size){
+	int largestSum = 0;
+	int sum = 0;
+	for(int i = 0; i < size; i++){
+		sum += arr[i];
+		if(sum > largestSum)
+			largestSum = sum;
+		else if(sum < 0)
+			sum = 0;
+	}
+	return largestSum;
+}
+
+//prints all pairs of integers in the array that sums to the specified value
+//this version of implementation uses array accesses but you can also use a hash map if space is not a problem (O(n))
+//O(nlogn)
+void printSumPairs(int arr[], int size, int sum){
+	//sort array
+	sort(arr, arr + size);
+	
+	int first = 0;
+	int last = size-1;
+	while(first < last){
+		int cur = arr[first] + arr[last];
+		//correct sum so print pair
+		if(cur == sum){
+			cout << arr[first] + " " + arr[last];
+			first++;
+			last--;
+		}
+		//increment first because need higher value
+		else if(cur < sum)
+			first++;
+		//decrement last because need lower value
+		else
+			last--;
+	}
+}
+
+//given two strings, find the shortest distance between them in the string array
+int shortestDist(string s[], int size, string s1, string s2){
+	//traverse array and save last position of word for each encounter and check distance between the two words
+	//if dist is lower than min then dist becomes the new min
+	int min = INT_MAX;
+	int s1LastPos = -1;
+	int s2LastPos = -1;
+	string curWord;
+	for(int i = 0; i < size; i++){
+		curWord = s[i];
+		if(curWord == s1){
+			s1LastPos = i;
+			int dist = s1LastPos - s2LastPos;
+			if(s2LastPos >= 0 && dist < min)
+				min = dist;
+		}
+		else if(curWord == s2){
+			s2LastPos = i;
+			int dist = s2LastPos - s1LastPos;
+			if(s1LastPos >= 0 && dist < min)
+				min = dist;
+		}
+	}
+	return min;
+}
+
+//selection sort on array
+void selectionSort(int arr[], int size){
+	int minIndex;
+	for(int i = 0; i < size-1; i++){
+		minIndex = i;
+		//finds minimum element in subarray
+		for(int j = i+1; j < size; j++){
+			if(arr[j] < arr[minIndex])
+				minIndex = j;
+		}
+
+		//swaps minimum element into appropriate position
+		int tmp = arr[i];
+		arr[i] = arr[minIndex];
+		arr[minIndex] = tmp;
+	}
+}
+
+//bubble sort
+void bubbleSort(int arr[], int size){
+	for(int i = 0; i < size-1; i++)
+		for(int j = 0; j < size-i-1; j++)
+			if(arr[j] > arr[j+1]){
+				int tmp = arr[j];
+				arr[j] = arr[j+1];
+				arr[j+1] = tmp;
+			}
+}
+
+//insertion sort
+void insertionSort(int arr[], int size){
+	int tmp, j;
+	for(int i = 1; i < size; i++){
+		tmp = arr[i];
+		j = i-1;
+		while(j >= 0 && tmp < arr[j]){
+			arr[j+1] = arr[j];
+			j--;
+		}
+		arr[j+1] = tmp;
+	}
+}
+
+//calculate x^n
+//O(logn) time
+int power(int x, unsigned int n){
+	if(n == 0)
+		return 1;
+	int tmp = power(x, n/2);
+	if(n%2 == 0)
+		return tmp * tmp;
+	else
+		return x * tmp * tmp;
+}
+
+//calculates the median of two sorted arrays
+//assumptions: both a1 and a2 are sorted and have the same size
+int median(int a1[], int a2[], int size){
+	int i = 0;
+	int j = 0;
+	int m1 = -1;
+	int m2 = -1;
+
+	//count up to size only
+	for(int count = 0; count <= size; count++){
+		//save prev median
+		m1 = m2;
+		//all of a1 is less than a2[0]
+		if(i == size){
+			m2 = a2[0];
+			break;
+		}
+		//all of a2 is less than a1[0]
+		else if(j == size){
+			m2 = a1[0];
+			break;
+		}
+		else if(a1[i] < a2[j]){
+			m2 = a1[i];
+			i++;
+		}
+		else{
+			m2 = a2[j];
+			j++;
+		}
+	}
+	return (m1 + m2) / 2;
+}
+
+//increment value of x by 1 without using operators (only bit manipulation)
+int increment(int x){
+	int one = 1;
+
+	//flip bits until we find rightmost 0
+	while(x & one){
+		x ^= one;
+		one <<= 1;
+	}
+
+	//flip rightmost 0 bit
+	x ^= one;
+	return x;
+}
+
+//rotate bits to the left by d bits
+//assumming 32-bit int
+int rotateLeft(int x, unsigned int d){
+	return (x << d) | (x >> (32 - d));
+}
+
+//rotate bits to the right by d bits
+//assumming 32-bit int
+int rotateRight(int x, unsigned int d){
+	return (x >> d) | (x << (32 - d));
+}
+
+//determines whether s can be rearranged to form a palindrome
+bool canFormPalindrome(string s){
+	//assuming ASCII-256 characters
+	int count[256] = { 0 };
+
+	for(int i = 0; i < s.size(); i++)
+		count[s[i]]++;
+
+	//count number of odd counts of char occurrences
+	int oddCount = 0;
+	for(int j = 0; j < 256; j++){
+		if(count[j] & 1)
+			oddCount++;
+	}
+
+	return (oddCount <= 1);
+}
+
+//partitions array around a pivot p, used for quicksort
+int partition(int arr[], int start, int end){
+	int pivot = arr[end];
+	int i = start;
+	for(int j = start; j < end; j++){
+		if(arr[j] <= pivot){
+			int tmp = arr[i];
+			arr[i] = arr[j];
+			arr[j] = tmp;
+			i++;
+		}
+	}
+	int t = arr[i];
+	arr[i] = arr[end];
+	arr[end] = t;
+	return i;
+}
+
+//quicksort
+void quickSort(int arr[], int start, int end){
+	if(start < end){
+		int p = partition(arr, start, end);
+		quickSort(arr, start, p-1);
+		quickSort(arr, p+1, end);
+	}
 }
