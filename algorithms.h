@@ -102,6 +102,9 @@ void printSumPairs(int arr[], int size, int sum);
 //assumptions: both a1 and a2 are sorted and have the same size
 int median(int a1[], int a2[], int size);
 
+//finds longest increasing subsequence of arr
+int* longestIncSeq(int arr[], int size);
+
 /*
 * Linked Lists
 */
@@ -132,6 +135,16 @@ listNode* findBegin(listNode* head);
 //creates a linked list for all the nodes at the level specified
 template<class V>
 void createLevelLinkedList(treeNode* root, listNode* head, int level);
+
+//finds intersection point of two singly linked lists
+//O(n+m) time, n and m are sizes of the linked lists
+template<class N>
+int findIntersection(listNode* h1, listNode* h2);
+
+//returns a random number from a list
+//uses reservoir sampling technique
+template<class N>
+int findRandom(listNode* head);
 
 /*
 * Graphs
@@ -248,13 +261,17 @@ void bubbleSort(int arr[], int size);
 //insertion sort
 void insertionSort(int arr[], int size);
 
-//TODO: Merge Sort
-
 //partitions array around a pivot p, used for quicksort
 int partition(int arr[], int start, int end);
 
 //quicksort
 void quickSort(int arr[], int start, int end);
+
+//merge
+void merge(int arr[], int start, int mid, int end);
+
+//mergesort
+void mergeSort(int arr[], int start, int end);
 
 /*
  * Others
