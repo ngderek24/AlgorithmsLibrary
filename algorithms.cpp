@@ -916,3 +916,148 @@ void quickSort(int arr[], int start, int end){
 		quickSort(arr, p+1, end);
 	}
 }
+
+//merge
+void merge(int arr[], int start, int mid, int end){
+	int s1 = mid - start + 1;
+	int s2 = end - mid;
+	int* left = new int[s1]; 
+	int* right = new int[s2];
+	int i, j, k;
+
+	//copy data from arr into temp arrays
+	for(i = 0; i < s1; i++)
+		left[i] = arr[start + i];
+	for(j = 0; j < s2; j++)
+		right[j] = arr[mid + 1 + j];
+
+	//merge from temp arrays into arr
+	i = 0;
+	j = 0;
+	k = start;
+	while(i < s1 && j < s2){
+		if(left[i] <= right[j]){
+			arr[k] = left[i];
+			i++;
+		}
+		else{
+			arr[k] = right[j];
+			j++;
+		}
+		k++;
+	}
+
+	//copy remaining elements of temp arrays
+	while(i < s1){
+		arr[k] = left[i];
+		i++;
+		k++;
+	}
+	while(j < s2){
+		arr[k] = right[j];
+		j++;
+		k++;
+	}
+
+	delete left;
+	delete right;
+}
+
+//mergesort
+void mergeSort(int arr[], int start, int end){
+	if(start < end){
+		int mid = (start + end) / 2;
+		mergeSort(arr, start, mid);
+		mergeSort(arr, mid + 1, end);
+		merge(arr, start, mid, end);
+	}
+}
+
+//finds intersection point of two singly linked lists
+//O(n+m) time, n and m are sizes of the linked lists
+template<class N>
+int findIntersection(listNode* h1, listNode* h2){
+	if(h1 == nullptr || h2 == nullptr)
+		return -1;
+
+	set<listNode*> visited;
+	listNode* temp = h1;
+	//add traversed nodes of h1 to set
+	while(temp != nullptr){
+		visited.insert(temp);
+		temp = temp->next;
+	}
+
+	temp = h2;
+	//if found node of h2 in set then we found intersection
+	while(temp != nullptr){
+		if(visited.find(temp) != set::end)
+			return temp->data;
+		temp = temp->next;
+	}
+	return -1;
+}
+
+//finds longest increasing subsequence of arr
+//b holds predecessor of arr[k] in longest subsequence
+//c[i] holds index of last element of longest increasing subsequence of length i in arr
+int* longestIncSeq(int arr[], int size){
+	int* b = new int[size];
+	int* c = new int[size+1];
+
+	//binary search to find largest index <= len such that arr[c[index]] < arr[i]
+	int len = 0;
+	for(int i = 0; i < size; i++){
+		int lo = 1;
+		int hi = len;
+		while(lo <= hi){
+			int mid = (lo + hi) / 2;
+			if(arr[c[mid]] < arr[i])
+				lo = mid + 1;
+			else
+				hi = mid - 1;
+		}
+
+		//save values of predecessor and new ending element
+		int newLen = lo;
+		b[i] = c[newLen-1];
+		c[newLen] = i;
+
+		//found longer length
+		if(newLen > len)
+			len = newLen;
+	}
+	
+	//construct longest increasing subsequence
+	int* res = new int[len];
+	int k = c[len];
+	for(int n = len-1; n >= 0; n--){
+		res[n] = arr[k];
+		k = b[k];
+	}
+	delete b;
+	delete c;
+	return res;
+}
+
+//returns a random number from a list
+//uses reservoir sampling technique
+template<class N>
+int findRandom(listNode* head){
+	if(head == nullptr)
+		return -1;
+
+	//different seed each program
+	srand(time(0));
+
+	int res = head->data;
+	listNode* temp = head;
+	for(int i = 2; temp != nullptr; i++){
+		//change res with probability of 1/i
+		if(rand() % i == 0)
+			res = temp->data;
+		//move to next node
+		temp = temp->next;
+	}
+	return res;
+}
