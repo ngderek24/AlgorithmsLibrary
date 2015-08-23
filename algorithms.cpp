@@ -1061,3 +1061,49 @@ int findRandom(listNode* head){
 	}
 	return res;
 }
+
+//finds the maximum path sum in a binary tree
+template<class V>
+int maxPathSum(treeNode* root, int& maxSum){
+	//base case
+	if(root == nullptr)
+		return 0;
+
+	//recur for left and right children
+	left = maxPathSum(root->left, maxSum);
+	right = maxPathSum(root->right, maxSum);
+
+	//max for parent call, can only include at most 1 child
+	int singleMax = max(max(left, right) + root->data, root->data);
+
+	//max with this node as the root and no ancestor
+	int max = max(singleMax, left + right + root->data);
+
+	//save max result
+	maxSum = max(res, max);
+
+	return singleMax;
+}
+
+//convert distinct elements in arr into zigzag format where a < b > c < d > e...
+//O(n) time
+void zigZag(int arr[], int size){
+	for(int i = 0; i < size-1; i++){
+		// i % 2 == 0 means relation is '<'
+		if(i % 2 == 0){
+			if(arr[i] > arr[i+1]){
+				int tmp = arr[i];
+				arr[i] = arr[i+1];
+				arr[i+1] = tmp;
+			}
+		}
+		// relation is '>'
+		else{
+			if(arr[i] < arr[i+1]){
+				int tmp = arr[i];
+				arr[i] = arr[i+1];
+				arr[i+1] = tmp;
+			}
+		}
+	}
+}
