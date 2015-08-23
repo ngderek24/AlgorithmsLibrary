@@ -105,6 +105,10 @@ int median(int a1[], int a2[], int size);
 //finds longest increasing subsequence of arr
 int* longestIncSeq(int arr[], int size);
 
+//convert distinct elements in arr into zigzag format where a < b > c < d > e...
+//O(n) time
+void zigZag(int arr[], int size);
+
 /*
 * Linked Lists
 */
@@ -210,6 +214,10 @@ bool treeMatch(treeNode* t1, treeNode* t2);
 //determines whether t1 contains t2 as a subtree
 template<class V>
 bool containsTree(treeNode* t1, treeNode* t2);
+
+//finds the maximum path sum in a binary tree
+template<class V>
+int maxPathSum(treeNode* root, int& maxSum);
 
 /*
 * Bit Manipulation
