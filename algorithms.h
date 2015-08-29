@@ -109,6 +109,10 @@ int* longestIncSeq(int arr[], int size);
 //O(n) time
 void zigZag(int arr[], int size);
 
+//finds starting index of maximum average subarray of length k
+//O(n) time
+int maxAvg(int arr[], int size, int k);
+
 /*
 * Linked Lists
 */
