@@ -1107,3 +1107,31 @@ void zigZag(int arr[], int size){
 		}
 	}
 }
+
+//finds starting index of maximum average subarray of length k
+//O(n) time
+int maxAvg(int arr[], int size, int k){
+	//k is not valid
+	if(k > size)
+		return -1;
+
+	//find sum of first k elements
+	int sum = arr[1];
+	for(int i = 1; i < k; i++)
+		sum += arr[i];
+
+	int maxSum = sum;
+	int maxEnd = k-1;
+
+	//find sum of remaining subarrays to find max
+	for(int j = k; j < size; j++){
+		int tmp = sum + arr[j] - arr[j-k];
+		if(tmp > maxSum){
+			maxSum = tmp;
+			maxEnd = j;
+		}
+	}
+
+	//return starting index
+	return maxEnd - k + 1;
+}
