@@ -1135,3 +1135,20 @@ int maxAvg(int arr[], int size, int k){
 	//return starting index
 	return maxEnd - k + 1;
 }
+
+// count how many n-digit numbers whose digits add up to sum
+// arr is the lookup memoization array to reduce time complexity of recursion
+// 1 <= n <= 100 and 1 <= sum <= 50000
+int countNDigitSum(int n, int sum){
+	unsigned long long int lookup[100][50000];
+	memset(lookup, -1, sizeof(lookup));
+
+	unsigned long long int ans = 0;
+
+	// ignores leading 0
+	for(int i = 1; i < 10; i++)
+		if(sum - i >= 0)
+			ans += countNDigitSumHelper(n-1, sum-i, lookup);
+
+	return ans;
+}
