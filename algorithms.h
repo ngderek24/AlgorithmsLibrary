@@ -260,6 +260,11 @@ int magicIndex(int arr[], int start, int end);
 //O(n!) time
 vector<string> computePerms(string s);
 
+// count how many n-digit numbers whose digits add up to sum
+// an array is used to reduce time complexity of recursion
+// 1 <= n <= 100 and 1 <= sum <= 50000
+int countNDigitSum(int n, int sum);
+
 /*
  * Searching and Sorting
  */
