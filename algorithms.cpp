@@ -1136,6 +1136,27 @@ int maxAvg(int arr[], int size, int k){
 	return maxEnd - k + 1;
 }
 
+// countNDigitSum helper
+int countNDigitSumHelper(int n, int sum, unsigned long long int arr[][50000]){
+	// base case
+	if(n == 0)
+		return (sum == 0);
+
+	// answer has already been computed
+	if(arr[n][sum] != -1)
+		return arr[n][sum];
+
+	unsigned long long int ans = 0;
+
+	// test all digits for each placeholder
+	for(int i = 0; i < 10; i++)
+		if(sum - i >= 0)
+			ans += countNDigitSumHelper(n-1, sum-i, arr);
+
+	arr[n][sum] = ans;
+	return ans;
+}
+
 // count how many n-digit numbers whose digits add up to sum
 // arr is the lookup memoization array to reduce time complexity of recursion
 // 1 <= n <= 100 and 1 <= sum <= 50000
@@ -1151,4 +1172,136 @@ int countNDigitSum(int n, int sum){
 			ans += countNDigitSumHelper(n-1, sum-i, lookup);
 
 	return ans;
+}
+
+//prints union of two sorted arrays
+//O(n+m) time
+void unionOfSortedArrays(int a[], int b[], int m, int n){
+	int i = 0;
+	int j = 0;
+
+	// traverse both arrays until end of one array
+	while(i < m && j < n){
+		if(a[i] < b[j]){
+			cout << a[i];
+			i++;
+		}
+		else if(a[i] > b[j]){
+			cout << b[j];
+			j++;
+		}
+		else{
+			cout << b[j];
+			i++; j++;
+		}
+	}
+
+	// print remaining elements of bigger array
+	while(i < m)
+		cout << a[i++];
+	while(j < n)
+		cout << b[j++];
+}
+
+//prints intersection of two sorted arrays
+//O(n+m) time
+void intersectionOfSortedArrays(int a[], int b[], int m, int n){
+	int i = 0;
+	int j = 0;
+	
+	while(i < m && j < n){
+		if(a[i] < b[j])
+			i++;
+		else if(a[i] > b[j])
+			j++;
+		else{
+			cout << a[i];
+			i++;
+			j++;
+		}
+	}
+}
+
+//prints the common nodes in two binary search trees
+//O(h1 + h2) space, O(n) time
+template<class V>
+void commonNodesBSTs(treeNode* r1, treeNode* r2){
+	// two stacks for inorder traversal of trees
+	stack<treeNode*> s1, s2;
+
+	while(true){
+		if(r1){
+			s1.push(r1);
+			r1 = r1->left;
+		}
+		else if(r2){
+			s2.push(r2);
+			r2 = r2->left;
+		}
+		// both roots are null
+		else if(!s1.empty() && !s2.empty()){
+			r1 = s1.top();
+			r2 = s2.top();
+
+			// same keys
+			if(r1->data == r2->data){
+				cout << r1->data;
+				s1.pop();
+				s2.pop();
+
+				// move to inorder successor
+				r1 = r1->right;
+				r2 = r2->right;
+			}
+			else if(r1->data < r2->data){
+				// go to inorder successor of r1 tree to find match
+				s1.pop();
+				r1 = r1->right;
+				r2 = nullptr;
+			}
+			else if(r1->data > r2->data){
+				// go to inorder successor of r2 tree to find match
+				s2.pop();
+				r2 = r2->right;
+				r1 = nullptr;
+			}
+		}
+		// both roots and stacks are null/empty
+		else
+			break;
+	}
+}
+
+//returns the next lexicographically greater string than s
+string nextPermutation(string s){
+	int size = s.size();
+	int suffix = size - 1;
+	// find beginning of latest suffix (sequence of non-increasing chars)
+	while(suffix > 0 && s[suffix] <= s[suffix-1])
+		suffix--;
+
+	// greatest lexicographically ordered string
+	if(suffix == 0)
+		return "no such string exists";
+
+	// find smallest order char that is greater than pivot (suffix-1) to swap
+	int i = size - 1;
+	while(s[i] <= s[suffix-1])
+		i--;
+
+	// swap pivot and s[i]
+	char tmp = s[i];
+	s[i] = s[suffix-1];
+	s[suffix-1] = tmp;
+
+	// reverse suffix and return string
+	i = size - 1;
+	while(suffix < i){
+		tmp = s[suffix];
+		s[suffix] = s[i];
+		s[i] = tmp;
+		i--;
+		suffix++;
+	}
+	return s;
 }
