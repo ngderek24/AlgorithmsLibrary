@@ -71,6 +71,9 @@ int shortestDist(string s[], int size, string s1, string s2);
 //determines whether s can be rearranged to form a palindrome
 bool canFormPalindrome(string s);
 
+//returns the next lexicographically greater string than s
+string nextPermutation(string s);
+
 /*
 * Arrays
 */
@@ -112,6 +115,14 @@ void zigZag(int arr[], int size);
 //finds starting index of maximum average subarray of length k
 //O(n) time
 int maxAvg(int arr[], int size, int k);
+
+//prints union of two sorted arrays
+//O(n+m) time
+void unionOfSortedArrays(int a[], int b[], int m, int n);
+
+//prints intersection of two sorted arrays
+//O(n+m) time
+void intersectionOfSortedArrays(int a[], int b[], int m, int n);
 
 /*
 * Linked Lists
@@ -222,6 +233,12 @@ bool containsTree(treeNode* t1, treeNode* t2);
 //finds the maximum path sum in a binary tree
 template<class V>
 int maxPathSum(treeNode* root, int& maxSum);
+
+
+//prints the common nodes in two binary search trees
+//O(h1 + h2) space, O(n) time
+template<class V>
+void commonNodesBSTs(treeNode* r1, treeNode* r2);
 
 /*
 * Bit Manipulation
