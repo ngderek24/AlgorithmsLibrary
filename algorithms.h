@@ -93,7 +93,7 @@ void merge(int a[], int b[], int sizeA, int sizeB);
 //O(log n) time expected
 int search(int arr[], int start, int end, int x);
 
-//finds contiguous sequence with largest sum in array (returns largest sum)
+//finds contiguous sequence with largest sum in array (returns largest sum) (Kadane's algorithm)
 int largestContSum(int arr[], int size);
 
 //prints all pairs of integers in the array that sums to the specified value
@@ -123,6 +123,10 @@ void unionOfSortedArrays(int a[], int b[], int m, int n);
 //prints intersection of two sorted arrays
 //O(n+m) time
 void intersectionOfSortedArrays(int a[], int b[], int m, int n);
+
+//returns the size of the largest subarray of a with sum of 0
+//O(n) time using hashed table
+int largestZeroSumSubarray(int a[], int n);
 
 /*
 * Linked Lists
@@ -281,6 +285,10 @@ vector<string> computePerms(string s);
 // an array is used to reduce time complexity of recursion
 // 1 <= n <= 100 and 1 <= sum <= 50000
 int countNDigitSum(int n, int sum);
+
+// return the length of the longest common subsequence of two strings
+// O(m + n)
+int longestCommonSubsequence(string x, string y, int m, int n);
 
 /*
  * Searching and Sorting
