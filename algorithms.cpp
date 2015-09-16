@@ -7,6 +7,7 @@
 #include <set>
 #include <algorithm>
 #include <climits>
+#include <map>
 using namespace std;
 
 //Level order traversal using queue
@@ -690,7 +691,7 @@ void swap(int& a, int& b){
 	a = a^b;
 }
 
-//finds contiguous sequence with largest sum in array (returns largest sum)
+//finds contiguous sequence with largest sum in array (returns largest sum) (Kadane's algorithm)
 int largestContSum(int arr[], int size){
 	int largestSum = 0;
 	int sum = 0;
@@ -1304,4 +1305,51 @@ string nextPermutation(string s){
 		suffix++;
 	}
 	return s;
+}
+
+//returns the size of the largest subarray of a with sum of 0
+//O(n) time using hashed table
+int largestZeroSumSubarray(int a[], int n){
+	map<int, int> prevSums;
+
+	int sum = 0;
+	int maxLen = 0;
+
+	// traverse through array
+	for(int i = 0; i < n; i++){
+		sum += a[i];
+
+		if(sum == 0)
+			maxLen = i+1;
+
+		// if sum is seen before then update maxLen if neccessary
+		map<int, int>::iterator it = prevSums.find(sum);
+		if(it != prevSums.end())
+			maxLen = max(maxLen, i - it->second);
+		else
+			prevSums[sum] = i;
+	}
+	return maxLen;
+}
+
+// return the length of the longest common subsequence of two strings
+// O(m + n)
+// assuming m and n < 100
+int longestCommonSubsequence(string x, string y, int m, const int n){
+	int opt[100][100];
+	
+	// opt[i][j] contains LCS length of x[0...i-1] and y[0...j-1]
+	for(int i = 0; i <= m; i++){
+		for(int j = 0; j <= n; j++){
+			if(i == 0 || j == 0)
+				opt[i][j] = 0;
+			else if(x[i-1] == y[j-1])
+				opt[i][j] = opt[i-1][j-1] + 1;
+			else
+				opt[i][j] = max(opt[i-1][j], opt[i][j-1]);
+		}
+	}
+
+	// LCS length for x[0...m-1] and y[0...n-1]
+	return opt[m][n];
 }
