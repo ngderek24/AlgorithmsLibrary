@@ -148,11 +148,10 @@ void reverseWords(char* str){
 	char *word_begin = NULL;
     char *temp = str; 
  
-    while( *temp )
-    {
+    while(*temp){
         /*make sure that the string start with
           valid character (not space) only*/
-        if (( word_begin == NULL ) && (*temp != ' ')){
+        if ((word_begin == NULL) && (*temp != ' ')){
             word_begin=temp;
         }
         if(word_begin && ((*(temp+1) == ' ') || (*(temp+1) == '\0'))){
@@ -326,8 +325,8 @@ bool isBalanced(treeNode* root, int& height){
 	}
 
 	//recur for subtrees
-	leftHeight = isBalanced(root->left, height);
-	rightHeight = isBalanced(root->right, height);
+	leftBal = isBalanced(root->left, leftHeight);
+	rightBal = isBalanced(root->right, rightHeight);
 
 	height = max(leftHeight, rightHeight) + 1;
 
@@ -1081,7 +1080,7 @@ int maxPathSum(treeNode* root, int& maxSum){
 	int max = max(singleMax, left + right + root->data);
 
 	//save max result
-	maxSum = max(res, max);
+	maxSum = max(maxSum, max);
 
 	return singleMax;
 }
@@ -1352,4 +1351,30 @@ int longestCommonSubsequence(string x, string y, int m, const int n){
 
 	// LCS length for x[0...m-1] and y[0...n-1]
 	return opt[m][n];
+}
+
+//returns maximum sum of a[i]*i with only rotations allowed on the array
+//O(n) time
+//if you write out equation for sum of each rotation (R(x) represents x rotations), you get
+// R(x) - R(x-1) = total sum - (n * a[n-x])
+int maxRotatedSum(int a[], int n){
+	// compute sum of all array elements
+	// and compute R(0)
+	int aSum = 0;
+	int curSum = 0;
+	for(int i = 0; i < n; i++){
+		aSum += a[i];
+		curSum += i * a[i];
+	}
+
+	// initialize maxSum to R(0)
+	int maxSum = curSum;
+
+	// compute each rotation using prev R(x) and get maxSum
+	for(int j = 1; j < n; j++){
+		curSum = aSum + curSum - (n * a[n-j]);
+		if(curSum > maxSum)
+			maxSum = curSum;
+	}
+	return maxSum;
 }
