@@ -128,6 +128,10 @@ void intersectionOfSortedArrays(int a[], int b[], int m, int n);
 //O(n) time using hashed table
 int largestZeroSumSubarray(int a[], int n);
 
+//returns maximum sum of a[i]*i with only rotations allowed on the array
+//O(n) time
+int maxRotatedSum(int a[], int n);
+
 /*
 * Linked Lists
 */
