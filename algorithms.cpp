@@ -1378,3 +1378,173 @@ int maxRotatedSum(int a[], int n){
 	}
 	return maxSum;
 }
+
+// helper for printLeftView
+template<class V>
+void leftViewHelper(treeNode* root, int level, int& maxLevel){
+	if(root == nullptr)
+		return;
+
+	// first node in level so print it since we're traversing left nodes first
+	if(maxLevel < level){
+		cout << root->data;
+		maxLevel = level;
+	}
+
+	// recur for left and right subtrees
+	leftViewHelper(root->left, level+1, maxLevel);
+	leftViewHelper(root->right, level+1, maxLevel);
+}
+
+//prints the nodes of a binary tree seen from the left view
+//right view is done similarly but opposite recursive calls
+template<class V>
+void printLeftView(treeNode* root){
+	int maxLevel = 0;
+	leftViewHelper(root, 1, maxLevel);
+}
+
+//removes whitespaces from a string
+// O(n) time
+void removeSpaces(string& s){
+	int nextChar = 0;
+
+	for(int i = 0; i < s.size(); i++){
+		if(s[i] != ' '){
+			s[nextChar] = s[i];
+			nextChar++;
+		}
+	}
+}
+
+// helper for isNumPalindrome
+bool isNumPalHelper(int num, int& copy){
+	// base case
+	if(num >= 0 && num < 10)
+		return (num == (copy % 10));
+
+	// recursive call
+	if(!isNumPalHelper(num/10, copy))
+		return false;
+
+	// moving up recursive tree to check digits in the middle
+	copy /= 10;
+
+	// check equality for ith digit of num from the start with ith digit of copy from the end
+	return (num % 10 == copy % 10);
+}
+
+// determines whether num is palindromic
+bool isNumPalindrome(int num){
+	// if negative, make positive
+	if(num < 0)
+		num = -num;
+
+	int numCopy = num;
+
+	return isNumPalHelper(num, numCopy);
+}
+
+//returns the maximum product of a subarray in a
+// O(n) time
+int maxProductSubarray(int a[], int n){
+	// max positive product ending at the current position
+    int curMax = 1;
+ 
+    // min negative product ending at the current position
+    int curMin = 1;
+ 
+    // Initialize overall max product
+    int maxProd = 1;
+ 
+    // Traverse throught the array
+    for (int i = 0; i < n; i++){
+        // element is positive
+        if(a[i] > 0){
+            curMax = curMax * a[i];
+            curMin = min(curMin * a[i], 1);
+        }
+        else if(a[i] == 0){
+            curMax = 1;
+            curMin = 1;
+        }
+        else{
+            int temp = curMax;
+			curMax = max (curMin * a[i], 1);
+			curMin = temp * a[i];
+        }
+ 
+        // update max_so_far, if needed
+		if (maxProd <  curMax)
+			maxProd  =  curMax;
+    }
+ 
+    return maxProd;
+}
+
+//reverse a singly linked list in groups of k nodes
+//O(n) time
+template<class N>
+void reverseListByK(listNode* head, int k){
+	listNode* curr = head;
+    listNode* next = nullptr;
+    listNode* prev = nullptr;
+    int count = 0;   
+     
+    // reverse first k nodes of the linked list starting from head
+    while(curr != nullptr && count < k){
+       next  = curr->next;
+       curr->next = prev;
+       prev = curr;
+       curr = next;
+       count++;
+    }
+     
+    // recur for next group of k nodes
+    if(next != nullptr){  
+		head->next = reverseListByK(next, k); 
+	}
+ 
+    // prev is the new head of reversed list
+    return prev;
+}
+
+//returns the length of the longest substring of s with unique characters
+//O(n) time
+int longestUniqueSubstring(string s){
+	int curLen = 1;
+	int maxLen = 1;
+	int prevIndex = 0;
+	int visited[256];
+
+	// initialize visited array
+	for(int i = 0; i < 256; i++)
+		visited[i] = -1;
+
+	// store index of first char
+	visited[s[0]] = 0;
+
+	// loop through each char of the string
+	for(int j = 1; j < s.size(); j++){
+		prevIndex = visited[s[j]];
+
+		// if char hasn't been visited or was in previous unique substring
+		if(prevIndex == -1 || j - curLen > prevIndex)
+			curLen++;
+		// if char is already in current unique substring, update maxLen if required and start new substring
+		else{
+			if(curLen > maxLen)
+				maxLen = curLen;
+
+			curLen = j - prevIndex;
+		}
+
+		//update index of current char
+		visited[s[j]] = j;
+	}
+
+	if(curLen > maxLen)
+		maxLen = curLen;
+
+	return maxLen;
+}
