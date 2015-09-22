@@ -74,6 +74,14 @@ bool canFormPalindrome(string s);
 //returns the next lexicographically greater string than s
 string nextPermutation(string s);
 
+//removes whitespaces from a string
+// O(n) time
+void removeSpaces(string& s);
+
+//returns the length of the longest substring of s with unique characters
+//O(n) time
+int longestUniqueSubstring(string s);
+
 /*
 * Arrays
 */
@@ -132,6 +140,10 @@ int largestZeroSumSubarray(int a[], int n);
 //O(n) time
 int maxRotatedSum(int a[], int n);
 
+//returns the maximum product of a subarray in a
+// O(n) time
+int maxProductSubarray(int a[], int n);
+
 /*
 * Linked Lists
 */
@@ -172,6 +184,11 @@ int findIntersection(listNode* h1, listNode* h2);
 //uses reservoir sampling technique
 template<class N>
 int findRandom(listNode* head);
+
+//reverse a singly linked list in groups of k nodes
+//O(n) time
+template<class N>
+void reverseListByK(listNode* head, int k);
 
 /*
 * Graphs
@@ -242,6 +259,10 @@ bool containsTree(treeNode* t1, treeNode* t2);
 template<class V>
 int maxPathSum(treeNode* root, int& maxSum);
 
+//prints the nodes of a binary tree seen from the left view
+template<class V>
+void printLeftView(treeNode* root);
+
 
 //prints the common nodes in two binary search trees
 //O(h1 + h2) space, O(n) time
@@ -293,6 +314,9 @@ int countNDigitSum(int n, int sum);
 // return the length of the longest common subsequence of two strings
 // O(m + n)
 int longestCommonSubsequence(string x, string y, int m, int n);
+
+// determines whether num is palindromic
+bool isNumPalindrome(int num);
 
 /*
  * Searching and Sorting
