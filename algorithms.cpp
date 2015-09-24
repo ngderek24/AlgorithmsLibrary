@@ -1548,3 +1548,81 @@ int longestUniqueSubstring(string s){
 
 	return maxLen;
 }
+
+//prints the only two integers in given array that appear an odd number of times
+void printOddTwoIntegers(int a[], int n){
+	// xor all int together
+	int allXor = a[0];
+	for(int i = 1; i < n; i++)
+		allXor ^= a[i];
+
+	// find position of first 1 bit from the left
+	int firstOne = 0;
+	int tmp = allXor;
+	while((tmp & 1) != 1){
+		firstOne++;
+		tmp >>= 1;
+	}
+
+	int zeroXor = NULL;
+	int oneXor = NULL;
+	for(int j = 0; j < n; j++){
+		if(((a[j] >> firstOne) & 1) == 0){
+			if(zeroXor == NULL)
+				zeroXor = a[j];
+			else
+				zeroXor ^= a[j];
+		}
+		else{
+			if(oneXor == NULL)
+				oneXor = a[j];
+			else
+				oneXor ^= a[j];
+		}
+	}
+
+	// print results
+	cout << zeroXor << endl << oneXor << endl;
+}
+
+//determines whether there exists an anagram of s1 that is a substring of s2
+//O(n) time
+bool isAnagramSubstring(const string& s1, const string& s2){
+	// error case
+	if(s1.size() > s2.size())
+		return false;
+
+	int s1Len = s1.size();
+
+	// keep count of occurences of each char
+	int s1Count[128] = { 0 };
+	int s2Count[128] = { 0 };
+	int i;
+	for(i = 0; i < s1Len; i++){
+		s1Count[s1[i]]++;
+		s2Count[s2[i]]++;
+	}
+
+	// check whether there's a substring of s2 that has same size and chars as s1
+	i = 0;
+	while(1){
+		int j;
+		// check if current substring of size s1Len is an anagram
+		for(j = 0; j < s1Len; j++)
+			if(s1Count[s1[j]] != s2Count[s1[j]])
+				break;
+
+		// found anagram
+		if(j == s1Len)
+			return true;
+
+		// slide window to the right by 1 char
+		if(s1Len + i + 1 > s2.size())
+			break;
+		s2Count[s2[i]]--;
+		s2Count[s2[i+s1Len]]++;
+		i++;
+	}
+
+	return false;
+}
