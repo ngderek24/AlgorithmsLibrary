@@ -82,6 +82,10 @@ void removeSpaces(string& s);
 //O(n) time
 int longestUniqueSubstring(string s);
 
+//determines whether there exists an anagram of s1 that is a substring of s2
+//O(n) time
+bool isAnagramSubstring(const string& s1, const string& s2);
+
 /*
 * Arrays
 */
@@ -292,6 +296,9 @@ int rotateLeft(int x, unsigned int d);
 //rotate bits to the right by d bits
 //assumming 32-bit int
 int rotateRight(int x, unsigned int d);
+
+//prints the only two integers in given array that appear an odd number of times
+void printOddTwoIntegers(int a[], int n);
 
 /*
 * Recursion & Dynamic Programming
