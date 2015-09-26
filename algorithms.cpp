@@ -162,7 +162,7 @@ void reverseWords(char* str){
     }
 
 	//reverse whole string after reversing each word
-    reverse(str, temp-1);
+    reverseString(str, temp-1);
 }
 
 //randomly shuffles elements of an array using the Fisher-Yates algorithm
@@ -1625,4 +1625,36 @@ bool isAnagramSubstring(const string& s1, const string& s2){
 	}
 
 	return false;
+}
+
+//determines whether s1 and s2 are isomorphic
+//O(n) time
+bool isIsomorphic(const string& s1, const string& s2) {
+	// size mismatch so can't be isomorphic
+	if(s1.size() != s2.size())
+		return false;
+
+	bool seenInS2[256] = { false };
+	int mapping[256] = { -1 };
+
+	// process each char in s1
+	for(int i = 0; i < s1.size(); i++) {
+		// first time char is seen
+		if(mapping[s1[i]] == -1) {
+			// if char has been seen in s2 then not isomorphic
+			if(seenInS2[s2[i]] == true)
+				return false;
+
+			// mark char as visited
+			seenInS2[s2[i]] = true;
+
+			// store mapping of char in s1 to char in s2
+			mapping[s1[i]] = s2[i];
+		}
+		// current char does not match previous mapping so not isomorphic
+		else if(mapping[s1[i]] != s2[i])
+			return false;
+	}
+
+	return true;
 }
