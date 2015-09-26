@@ -86,6 +86,10 @@ int longestUniqueSubstring(string s);
 //O(n) time
 bool isAnagramSubstring(const string& s1, const string& s2);
 
+//determines whether s1 and s2 are isomorphic
+//O(n) time
+bool isIsomorphic(const string& s1, const string& s2);
+
 /*
 * Arrays
 */
