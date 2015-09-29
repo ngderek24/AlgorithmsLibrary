@@ -1658,3 +1658,32 @@ bool isIsomorphic(const string& s1, const string& s2) {
 
 	return true;
 }
+
+//returns the length of the longest valid substring of a string consisting of open and close parentheses
+//O(n) time
+int maxValidSubstring(const string& s) {
+	stack<int> parenIndex;
+	parenIndex.push(-1);
+	
+	int res = 0;
+
+	// traverse string
+	for(int i = 0; i < s.size(); i++) {
+		// if '(' push index onto stack
+		if(s[i] == '(')
+			parenIndex.push(i);
+
+		// if ')'
+		else {
+			// pop opening paren index
+			parenIndex.pop();
+
+			// if we found longer valid substring, then update
+			if(!parenIndex.empty())
+				res = max(res, i - parenIndex.top());
+			else
+				parenIndex.push(i);
+		}
+	}
+	return res;
+}
