@@ -90,6 +90,10 @@ bool isAnagramSubstring(const string& s1, const string& s2);
 //O(n) time
 bool isIsomorphic(const string& s1, const string& s2);
 
+//returns the length of the longest valid substring of a string consisting of open and close parentheses
+//O(n) time
+int maxValidSubstring(const string& s);
+
 /*
 * Arrays
 */
