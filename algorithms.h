@@ -156,6 +156,10 @@ int maxRotatedSum(int a[], int n);
 // O(n) time
 int maxProductSubarray(int a[], int n);
 
+//determines whether a represents a binary heap
+// O(n) time
+bool isHeap(int a[], int i, int n);
+
 /*
 * Linked Lists
 */
