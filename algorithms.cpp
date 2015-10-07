@@ -1687,3 +1687,17 @@ int maxValidSubstring(const string& s) {
 	}
 	return res;
 }
+
+//determines whether a represents a binary heap
+// O(n) time
+bool isHeap(int a[], int i, int n) {
+	// checks if a[i] is a leaf node
+	if (i > (n - 2) / 2)
+		return true;
+
+	// internal nodes should be greater or equal to both of its children and recursively same for the children
+	if (a[i] >= a[i*2 + 1] && a[i] >= a[i*2 + 2] && isHeap(a, i*2 + 1, n) && isHeap(a, i*2 + 2, n))
+		return true;
+
+	return false;
+}
