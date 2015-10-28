@@ -279,7 +279,6 @@ int maxPathSum(treeNode* root, int& maxSum);
 template<class V>
 void printLeftView(treeNode* root);
 
-
 //prints the common nodes in two binary search trees
 //O(h1 + h2) space, O(n) time
 template<class V>
@@ -337,6 +336,10 @@ int longestCommonSubsequence(string x, string y, int m, int n);
 // determines whether num is palindromic
 bool isNumPalindrome(int num);
 
+// returns the length of the longest common substring of s1 and s2
+// O(s1Size + s2Size)
+int longestCommonSubstr(const string& s1, const string& s2);
+
 /*
  * Searching and Sorting
  */
@@ -372,5 +375,8 @@ void swap(int& a, int& b);
 //calculate x^n
 //O(logn) time
 int power(int x, unsigned int n);
+
+// returns whether n is a Fibonacci number
+bool isFibonacci(int n);
 
 #endif
