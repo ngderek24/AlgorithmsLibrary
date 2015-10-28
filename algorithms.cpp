@@ -1701,3 +1701,36 @@ bool isHeap(int a[], int i, int n) {
 
 	return false;
 }
+
+// returns the length of the longest common substring of s1 and s2
+// O(s1Size + s2Size)
+int longestCommonSubstr(const string& s1, const string& s2) {
+	int dp[100][100];
+	int longest = 0;
+
+	for (int i = 0; i <= s1.size(); i++) {
+		for (int j = 0; j <= s2.size(); j++) {
+			if (i == 0 || j == 0)
+				dp[i][j] = 0;
+			else if (s1[i - 1] == s2[j - 1]) {
+				dp[i][j] = dp[i - 1][j - 1] + 1;
+				longest = max(longest, dp[i][j]);
+			}
+			else
+				dp[i][j] = 0;
+		}
+	}
+
+	return longest;
+}
+
+// returns whether n is a Fibonacci number
+bool isFibonacci(int n) {
+	int a = 5 * n * n + 4;
+	int b = 5 * n * n - 4;
+
+	int sqrtA = sqrt(a);
+	int sqrtB = sqrt(b);
+
+	return (sqrtA * sqrtA == a || sqrtB * sqrtB == b);
+}
